@@ -15,8 +15,23 @@ namespace RestaurantOps.Legacy.Controllers
             return View(tables);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Seat(int id)
         {
+            if (id <= 0)
+            {
+                TempData["Error"] = "Invalid table ID.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var table = _tableRepo.GetAll().FirstOrDefault(t => t.TableId == id);
+            if (table == null)
+            {
+                TempData["Error"] = "Table not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var order = _orderRepo.GetCurrentByTable(id);
             if (order == null)
             {

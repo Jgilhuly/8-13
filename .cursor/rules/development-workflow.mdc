@@ -1,0 +1,47 @@
+# Development Workflow
+
+## Development Environment Setup
+- **IDE**: Visual Studio or Visual Studio Code with C# extensions
+- **Database**: SQL Server (local or containerized)
+- **Runtime**: .NET 8.0 SDK
+- **Package Manager**: NuGet for dependencies
+
+## Configuration Management
+- **Environment Files**: Use [appsettings.Development.json](mdc:RestaurantOps.Legacy/appsettings.Development.json) for local development
+- **Connection Strings**: Configure database connections in appsettings files
+- **Secrets**: Use User Secrets for sensitive configuration during development
+- **Environment Variables**: Override settings with environment variables in production
+
+## Database Development
+- **Migrations**: Use EF Core migrations for schema changes
+- **Seed Data**: Populate test data using [Database/init.sql](mdc:Database/init.sql)
+- **Schema Updates**: Apply migrations before running the application
+- **Data Validation**: Verify data integrity after schema changes
+
+## Debugging and Troubleshooting
+- **Logging**: Use structured logging with ILogger throughout the application
+- **Exception Handling**: Implement global exception handling in [Program.cs](mdc:RestaurantOps.Legacy/Program.cs)
+- **Database Connectivity**: Check connection strings and database availability
+- **Performance**: Monitor database query performance and optimize slow queries
+
+## Code Organization
+- **Separation of Concerns**: Keep controllers thin, business logic in services
+- **Dependency Injection**: Use constructor injection for dependencies
+- **Repository Pattern**: Abstract data access behind repository interfaces
+- **Service Layer**: Implement business logic in dedicated service classes
+
+## Testing Strategy
+- **Unit Tests**: Write tests for individual components and methods
+- **Integration Tests**: Test complete workflows with database integration
+- **Test Data**: Use builders and factories for consistent test scenarios
+- **Coverage**: Aim for high test coverage, especially for business logic
+
+## Deployment Considerations
+- **Environment Configuration**: Separate configuration for different environments
+- **Database Migrations**: Ensure migrations are applied during deployment
+- **Health Checks**: Implement health checks for database connectivity
+- **Monitoring**: Set up application and database monitoring in production
+description:
+globs:
+alwaysApply: false
+---

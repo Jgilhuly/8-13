@@ -23,14 +23,28 @@ namespace RestaurantOps.Legacy.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddItem(int orderId, int menuItemId, int quantity)
         {
-            var menuItem = _menuRepo.GetAll().First(mi => mi.MenuItemId == menuItemId);
+            if (quantity <= 0)
+            {
+                TempData["Error"] = "Quantity must be positive.";
+                return RedirectToAction("Details", new { id = orderId });
+            }
+
+            var menuItem = _menuRepo.GetAll().FirstOrDefault(mi => mi.MenuItemId == menuItemId);
+            if (menuItem == null || !menuItem.IsAvailable)
+            {
+                TempData["Error"] = "Menu item is unavailable.";
+                return RedirectToAction("Details", new { id = orderId });
+            }
+
             _orderRepo.AddLine(orderId, menuItemId, quantity, menuItem.Price);
             return RedirectToAction("Details", new { id = orderId });
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Close(int orderId)
         {
             var order = _orderRepo.GetById(orderId);
@@ -43,6 +57,7 @@ namespace RestaurantOps.Legacy.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Submit(int orderId)
         {
             _orderRepo.SubmitOrder(orderId);

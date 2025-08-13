@@ -1,0 +1,40 @@
+# Testing Guidelines
+
+## Test Project Structure
+- **Unit Tests**: [UnitTests/](mdc:RestaurantOps.Tests/UnitTests/) directory for isolated component testing
+- **Integration Tests**: [IntegrationTests/](mdc:RestaurantOps.Tests/IntegrationTests/) directory for database and service integration
+- **Test Builders**: [Builders/](mdc:RestaurantOps.Tests/Builders/) directory for test data construction
+
+## Unit Testing Patterns
+- **Arrange-Act-Assert**: Follow AAA pattern for test structure
+- **Mocking**: Use Moq or similar framework for external dependencies
+- **Test Data**: Use builders and factories for consistent test data
+- **Naming**: Use descriptive test names that explain the scenario and expected outcome
+
+## Integration Testing
+- **Database**: Use test database or in-memory provider for EF Core tests
+- **Services**: Test complete workflows with real dependencies
+- **Cleanup**: Ensure test data is properly cleaned up after each test
+- **Isolation**: Tests should not depend on each other
+
+## Test Categories
+- **Controller Tests**: Verify HTTP responses, model binding, and validation
+- **Repository Tests**: Test data access logic and SQL queries
+- **Service Tests**: Test business logic and workflow orchestration
+- **Model Tests**: Test validation rules and business constraints
+
+## Test Data Management
+- **Builders**: Use builder pattern for complex object construction
+- **Factories**: Create test data factories for common scenarios
+- **Fixtures**: Use xUnit fixtures for shared test data
+- **Randomization**: Use deterministic random data for edge cases
+
+## Assertion Patterns
+- **Specific Assertions**: Use specific assertions rather than generic ones
+- **Custom Assertions**: Create custom assertion methods for domain-specific validations
+- **Exception Testing**: Test both expected and unexpected exceptions
+- **Performance**: Consider performance assertions for critical paths
+description:
+globs:
+alwaysApply: false
+---

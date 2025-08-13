@@ -55,9 +55,19 @@ namespace RestaurantOps.Legacy.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Adjust(int ingredientId, decimal quantityChange, string? notes)
         {
+            if (ingredientId <= 0)
+            {
+                TempData["Error"] = "Invalid ingredient.";
+                return RedirectToAction(nameof(Index));
+            }
             if (quantityChange == 0)
             {
                 TempData["Error"] = "Quantity change cannot be zero.";
+                return RedirectToAction(nameof(Index));
+            }
+            if (Math.Abs(quantityChange) > 100000)
+            {
+                TempData["Error"] = "Quantity change is too large.";
                 return RedirectToAction(nameof(Index));
             }
             _txRepo.AdjustStock(ingredientId, quantityChange, notes);

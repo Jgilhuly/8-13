@@ -1,0 +1,42 @@
+# RestaurantOps Coding Standards
+
+## C# Conventions
+- Use PascalCase for public members, classes, and methods
+- Use camelCase for private fields and local variables
+- Use `_` prefix for private fields (e.g., `_logger`)
+- Prefer `var` for local variable declarations when type is obvious
+- Use expression-bodied members for simple properties and methods
+
+## Controller Patterns
+- Controllers should be thin, delegating business logic to repositories
+- Use dependency injection for services and repositories
+- Follow RESTful naming conventions for actions
+- Return appropriate HTTP status codes and error responses
+
+## Model Conventions
+- Use data annotations for validation where appropriate
+- Keep models focused on data representation
+- Use navigation properties for Entity Framework relationships
+- Implement `IValidatableObject` for complex validation logic
+
+## Repository Pattern
+- Use interfaces for repositories to enable testing
+- Implement both EF Core and ADO.NET approaches as needed
+- Handle database exceptions gracefully
+- Use parameterized queries to prevent SQL injection
+
+## View Conventions
+- Use strongly-typed models in views
+- Follow Razor syntax conventions
+- Use partial views for reusable components
+- Implement proper validation and error display
+
+## Error Handling
+- Use structured logging with ILogger
+- Implement global exception handling in Program.cs
+- Return user-friendly error messages
+- Log technical details for debugging
+description:
+globs:
+alwaysApply: false
+---

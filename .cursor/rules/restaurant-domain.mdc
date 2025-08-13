@@ -1,0 +1,53 @@
+# Restaurant Domain Concepts
+
+## Core Business Entities
+
+### Menu Management
+- **Categories**: Organize menu items by type (e.g., Appetizers, Main Course, Desserts)
+- **MenuItems**: Individual dishes with pricing, availability, and ingredient requirements
+- **Pricing**: Decimal precision for accurate financial calculations
+
+### Order Processing
+- **Orders**: Represent customer requests with status tracking (Open, In Progress, Completed)
+- **OrderLines**: Individual items within an order with quantities and special instructions
+- **Tables**: Physical restaurant tables for order association and seating management
+
+### Inventory Management
+- **Ingredients**: Raw materials used in menu item preparation
+- **InventoryTx**: Transaction history for stock adjustments (receiving, usage, waste)
+- **Stock Levels**: Real-time tracking of ingredient quantities on hand
+
+### Staff Management
+- **Employees**: Restaurant staff with roles and scheduling information
+- **Shifts**: Work schedule assignments with start/end times
+- **TimeOff**: Employee leave requests and approvals
+
+## Business Workflows
+
+### Order Lifecycle
+1. **Creation**: Order created when customer places request
+2. **Preparation**: Kitchen staff processes order items
+3. **Completion**: Order marked as finished and ready for service
+4. **Closure**: Order finalized and table cleared for next customer
+
+### Inventory Operations
+1. **Receiving**: New ingredients added to inventory
+2. **Usage**: Ingredients consumed during food preparation
+3. **Adjustments**: Manual corrections for waste, spoilage, or counting errors
+4. **Reporting**: Generate reorder reports for low-stock items
+
+### Staff Scheduling
+1. **Shift Planning**: Create weekly/monthly schedules
+2. **Time Off Requests**: Employees submit leave requests
+3. **Approval Process**: Management reviews and approves requests
+4. **Schedule Updates**: Real-time adjustments for call-offs or emergencies
+
+## Business Rules
+- **Order Status**: Orders progress through predefined status values
+- **Inventory Constraints**: Cannot use more ingredients than available
+- **Table Management**: Tables can only have one active order at a time
+- **Employee Scheduling**: Shifts must not overlap for the same employee
+description:
+globs:
+alwaysApply: false
+---

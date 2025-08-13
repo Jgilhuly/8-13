@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+---
+
+# RestaurantOps Project Overview
+
+This is a .NET Core restaurant management system with a hybrid architecture combining modern Entity Framework Core with legacy ADO.NET patterns.
+
+## Project Structure
+- **Main Application**: [RestaurantOps.Legacy](mdc:RestaurantOps.Legacy/) - ASP.NET Core MVC application
+- **Database**: [Database/init.sql](mdc:Database/init.sql) - SQL Server database schema
+- **Tests**: [RestaurantOps.Tests/](mdc:RestaurantOps.Tests/) - Unit and integration tests
+- **Solution**: [RestaurantOps.sln](mdc:RestaurantOps.sln) - Visual Studio solution file
+
+## Architecture Patterns
+- **Controllers**: Follow MVC pattern in [Controllers/](mdc:RestaurantOps.Legacy/Controllers/) directory
+- **Models**: Domain entities in [Models/](mdc:RestaurantOps.Legacy/Models/) directory
+- **Data Access**: Hybrid approach using both [RestaurantOpsDbContext](mdc:RestaurantOps.Legacy/Data/RestaurantOpsDbContext.cs) (EF Core) and [SqlHelper](mdc:RestaurantOps.Legacy/Data/SqlHelper.cs) (ADO.NET)
+- **Views**: Razor views in [Views/](mdc:RestaurantOps.Legacy/Views/) directory
+
+## Key Domain Areas
+- **Menu Management**: Categories, MenuItems, pricing
+- **Order Processing**: Orders, OrderLines, table management
+- **Inventory**: Ingredients, stock tracking, transactions
+- **Staff Management**: Employees, shifts, time-off requests
+- **Kitchen Operations**: Order display, preparation workflow
+
+Be sure to respect the package dependency version in package.json
+
+## Entry Point
+The application starts at [Program.cs](mdc:RestaurantOps.Legacy/Program.cs) which configures services, database connections, and middleware pipeline.

@@ -1,0 +1,35 @@
+# Data Access Patterns
+
+## Entity Framework Core
+- **DbContext**: [RestaurantOpsDbContext](mdc:RestaurantOps.Legacy/Data/RestaurantOpsDbContext.cs) handles EF Core operations
+- **Model Configuration**: Use Fluent API in `OnModelCreating` for complex mappings
+- **Relationships**: Configure foreign keys and navigation properties explicitly
+- **Migrations**: Use EF Core migrations for schema changes, stored in [Migrations/](mdc:RestaurantOps.Legacy/Data/Migrations/) directory
+
+## ADO.NET Legacy Support
+- **SqlHelper**: [SqlHelper](mdc:RestaurantOps.Legacy/Data/SqlHelper.cs) provides ADO.NET database access
+- **Parameterized Queries**: Always use SqlParameter to prevent SQL injection
+- **Transaction Management**: Use SqlTransaction for multi-step operations
+- **Data Mapping**: Implement manual mapping from DataRow to domain models
+
+## Repository Implementation
+- **Hybrid Approach**: Support both EF Core and ADO.NET as needed
+- **Interface Pattern**: Define repository contracts for testability
+- **Exception Handling**: Catch and log database exceptions appropriately
+- **Connection Management**: Use SqlHelper for connection pooling
+
+## Database Schema
+- **Tables**: Follow naming conventions (e.g., Categories, MenuItems, Orders)
+- **Primary Keys**: Use auto-incrementing integer IDs
+- **Foreign Keys**: Maintain referential integrity with appropriate constraints
+- **Indexes**: Consider performance implications for frequently queried columns
+
+## Data Models
+- **Domain Entities**: Keep models focused on business logic
+- **Validation**: Use data annotations for basic validation rules
+- **Navigation Properties**: Use for EF Core relationships
+- **DTOs**: Consider using Data Transfer Objects for complex queries
+description:
+globs:
+alwaysApply: false
+---

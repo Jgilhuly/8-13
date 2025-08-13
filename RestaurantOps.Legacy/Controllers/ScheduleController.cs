@@ -32,6 +32,22 @@ namespace RestaurantOps.Legacy.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddShift(int employeeId, DateTime shiftDate, TimeSpan startTime, TimeSpan endTime, string role)
         {
+            // Input validation
+            if (employeeId <= 0)
+            {
+                TempData["Error"] = "Invalid employee ID.";
+                return RedirectToAction(nameof(Index));
+            }
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                TempData["Error"] = "Role is required.";
+                return RedirectToAction(nameof(Index));
+            }
+            if (shiftDate.Date < DateTime.Today.AddDays(-30))
+            {
+                TempData["Error"] = "Cannot schedule shifts more than 30 days in the past.";
+                return RedirectToAction(nameof(Index));
+            }
             if (endTime <= startTime)
             {
                 TempData["Error"] = "End time must be after start time.";
@@ -77,6 +93,16 @@ namespace RestaurantOps.Legacy.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SetTimeOffStatus(int id, string status)
         {
+            if (id <= 0)
+            {
+                TempData["Error"] = "Invalid time-off request ID.";
+                return RedirectToAction(nameof(TimeOff));
+            }
+            if (string.IsNullOrWhiteSpace(status) || !new[] { "Approved", "Denied" }.Contains(status))
+            {
+                TempData["Error"] = "Invalid status. Must be 'Approved' or 'Denied'.";
+                return RedirectToAction(nameof(TimeOff));
+            }
             _shiftRepo.SetTimeOffStatus(id, status);
             return RedirectToAction(nameof(TimeOff));
         }
