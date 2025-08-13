@@ -1,0 +1,83 @@
+@model RestaurantOps.Legacy.Models.Order
+
+@{
+    ViewData["Title"] = $"Order #{Model.OrderId}";
+}
+
+<h1>Order for Table @Model.TableId</h1>
+
+<p><strong>Status:</strong>
+    @switch (Model.Status)
+    {
+        case "Open":
+            <span class="badge bg-success">Open</span>
+            break;
+        case "Submitted":
+            <span class="badge bg-info">Submitted to Kitchen</span>
+            break;
+        case "Closed":
+            <span class="badge bg-secondary">Closed</span>
+            break;
+    }
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var line in Model.Lines)
+    {
+        <tr>
+            <td>@line.MenuItemName</td>
+            <td>@line.Quantity</td>
+            <td>@line.PriceEach.ToString("C")</td>
+            <td>@line.LineTotal.ToString("C")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.Status == "Open")
+{
+    <h4>Add Item</h4>
+    <form asp-action="AddItem" method="post" class="row g-3">
+        <input type="hidden" name="orderId" value="@Model.OrderId" />
+        <div class="col-md-6">
+            <label class="form-label">Menu Item</label>
+            <select name="menuItemId" class="form-select" required>
+                <option value="">-- select --</option>
+                @foreach (var mi in (IEnumerable<RestaurantOps.Legacy.Models.MenuItem>)ViewBag.MenuItems)
+                {
+                    <option value="@mi.MenuItemId">@mi.Name (@mi.Price.ToString("C"))</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Quantity</label>
+            <input type="number" name="quantity" class="form-control" value="1" min="1" required />
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+}
+else
+{
+    <p class="text-muted">Cannot add items – order already @Model.Status.ToLower().</p>
+}
+
+<form asp-action="Submit" method="post" class="mt-3">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <button type="submit" class="btn btn-warning" onclick="return confirm('Send order to kitchen?');">Submit to Kitchen</button>
+</form>
+
+<form asp-action="Close" method="post" class="mt-3">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Close order and free table? This cannot be undone.');">Close Order</button>
+</form> 

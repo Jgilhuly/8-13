@@ -1,0 +1,171 @@
+@model IEnumerable<RestaurantOps.Legacy.Models.Shift>
+@using System.Globalization
+@{
+    var start = (DateTime)ViewBag.Start;
+    var end = (DateTime)ViewBag.End;
+    ViewData["Title"] = $"Schedule {start:MMM dd} - {end:MMM dd}";
+    var employees = (IEnumerable<RestaurantOps.Legacy.Models.Employee>)ViewBag.Employees;
+    var groupedShifts = Model.GroupBy(s => s.ShiftDate.Date).OrderBy(g => g.Key);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-2">Weekly Schedule</h1>
+        <p class="text-muted fs-5">@start.ToString("MMMM dd") - @end.ToString("MMMM dd, yyyy")</p>
+    </div>
+    <div class="d-flex gap-2">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-route-week="@(start.AddDays(-7).ToString("yyyy-MM-dd"))" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Previous Week
+            </a>
+            <a asp-action="Index" asp-route-week="@(start.AddDays(7).ToString("yyyy-MM-dd"))" class="btn btn-outline-secondary">
+                Next Week
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+        </div>
+        <a asp-action="TimeOff" class="btn btn-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-x me-2" viewBox="0 0 16 16">
+                <path d="M6.146 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z"/>
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+            </svg>
+            Pending Time-Off
+        </a>
+    </div>
+</div>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle me-2" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+        </svg>
+        @err
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th style="width: 150px;">Date</th>
+                    <th>Employee</th>
+                    <th style="width: 150px;">Role</th>
+                    <th style="width: 100px;" class="text-center">Start</th>
+                    <th style="width: 100px;" class="text-center">End</th>
+                    <th style="width: 100px;" class="text-center">Hours</th>
+                    <th style="width: 80px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var dateGroup in groupedShifts)
+            {
+                <tr class="table-light">
+                    <td colspan="7" class="fw-bold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3 me-2" viewBox="0 0 16 16">
+                            <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
+                            <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                        </svg>
+                        @dateGroup.Key.ToString("dddd, MMMM d")
+                    </td>
+                </tr>
+                @foreach (var shift in dateGroup.OrderBy(s => s.StartTime))
+                {
+                    var hours = (shift.EndTime - shift.StartTime).TotalHours;
+                    
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="fw-semibold">@shift.EmployeeName</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@shift.Role</span>
+                        </td>
+                        <td class="text-center">@shift.StartTime.ToString(@"hh\:mm")</td>
+                        <td class="text-center">@shift.EndTime.ToString(@"hh\:mm")</td>
+                        <td class="text-center">
+                            <span class="text-muted">@hours.ToString("0.0")h</span>
+                        </td>
+                        <td class="text-center">
+                            <form asp-action="DeleteShift" method="post" onsubmit="return confirm('Delete this shift?');" class="d-inline">
+                                <input type="hidden" name="id" value="@shift.ShiftId" />
+                                <input type="hidden" name="week" value="@start.ToString("yyyy-MM-dd")" />
+                                <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-calendar-x text-secondary mb-3" viewBox="0 0 16 16">
+                            <path d="M6.146 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z"/>
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                        </svg>
+                        <p>No shifts scheduled for this week</p>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0 text-white">Add New Shift</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="AddShift" method="post" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Employee</label>
+                <select name="employeeId" class="form-select" required>
+                    <option value="">-- Select Employee --</option>
+                    @foreach (var e in employees.OrderBy(e => e.FullName))
+                    {
+                        <option value="@e.EmployeeId">@e.FullName (@e.Role)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="shiftDate" class="form-control" value="@start.ToString("yyyy-MM-dd")" min="@start.ToString("yyyy-MM-dd")" max="@end.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Start Time</label>
+                <input type="time" name="startTime" class="form-control" value="09:00" required />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">End Time</label>
+                <input type="time" name="endTime" class="form-control" value="17:00" required />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Role</label>
+                <input type="text" name="role" class="form-control" placeholder="e.g., Server, Cook" required />
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    Add Shift
+                </button>
+            </div>
+        </form>
+    </div>
+</div> 

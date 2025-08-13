@@ -1,0 +1,34 @@
+@model IEnumerable<RestaurantOps.Legacy.Models.Ingredient>
+
+@{
+    ViewData["Title"] = "Reorder Threshold Report";
+}
+
+<h1>Reorder Threshold Report</h1>
+
+<p>
+    <a asp-action="ReorderReport" asp-route-format="csv" class="btn btn-outline-secondary">Export CSV</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to Inventory</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Unit</th>
+            <th>On Hand</th>
+            <th>Reorder Level</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var ing in Model)
+    {
+        <tr>
+            <td>@ing.Name</td>
+            <td>@ing.Unit</td>
+            <td>@ing.QuantityOnHand</td>
+            <td>@ing.ReorderThreshold</td>
+        </tr>
+    }
+    </tbody>
+</table> 

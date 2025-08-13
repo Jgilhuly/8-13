@@ -1,0 +1,24 @@
+@model RestaurantOps.Legacy.Models.Ingredient
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="Unit" class="form-label"></label>
+        <input asp-for="Unit" class="form-control" />
+        <span asp-validation-for="Unit" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="QuantityOnHand" class="form-label"></label>
+        <input asp-for="QuantityOnHand" class="form-control" />
+        <span asp-validation-for="QuantityOnHand" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="ReorderThreshold" class="form-label"></label>
+        <input asp-for="ReorderThreshold" class="form-control" />
+        <span asp-validation-for="ReorderThreshold" class="text-danger"></span>
+    </div>
+</div> 
